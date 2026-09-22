@@ -212,9 +212,19 @@
                             {{ crisis.description }}
                         </p>
 
-                        <span class="tag">
-                            {{ crisis.category }}
-                        </span>
+                        {% if crisis.category == "External News" %}
+
+    <span class="tag">
+        🌐 External News
+    </span>
+
+{% else %}
+
+    <span class="tag">
+        📝 User Report
+    </span>
+
+{% endif %}
 
                         {% if crisis.source_url %}
                             <br>

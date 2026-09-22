@@ -6,6 +6,132 @@ from app import app, db, Crisis
 URL = "https://api.gdeltproject.org/api/v2/doc/doc"
 
 
+def detect_category(title):
+    title = title.lower()
+
+    if any(
+        word in title
+        for word in [
+            "earthquake",
+            "flood",
+            "cyclone",
+            "hurricane",
+            "wildfire",
+            "volcano",
+            "storm",
+            "tornado",
+        ]
+    ):
+        return "Natural Disaster"
+
+    if any(
+        word in title
+        for word in [
+            "war",
+            "attack",
+            "conflict",
+            "fighting",
+            "missile",
+            "bombing",
+        ]
+    ):
+        return "Conflict"
+
+    if any(
+        word in title
+        for word in [
+            "outbreak",
+            "virus",
+            "disease",
+            "epidemic",
+            "pandemic",
+        ]
+    ):
+        return "Health"
+
+    if any(
+        word in title
+        for word in [
+            "refugee",
+            "humanitarian",
+            "displacement",
+            "aid",
+        ]
+    ):
+        return "Humanitarian"
+
+    return "Other"
+
+
+def detect_region(title):
+    title = title.lower()
+
+    regions = {
+        "South Asia": [
+            "india",
+            "pakistan",
+            "bangladesh",
+            "nepal",
+            "sri lanka",
+        ],
+        "East Asia": [
+            "china",
+            "japan",
+            "south korea",
+            "korea",
+        ],
+        "Middle East": [
+            "israel",
+            "palestine",
+            "iran",
+            "iraq",
+            "syria",
+            "lebanon",
+            "yemen",
+        ],
+        "Europe": [
+            "ukraine",
+            "russia",
+            "france",
+            "germany",
+            "italy",
+            "spain",
+            "uk",
+            "britain",
+        ],
+        "North America": [
+            "united states",
+            "usa",
+            "canada",
+            "mexico",
+        ],
+        "Africa": [
+            "nigeria",
+            "kenya",
+            "sudan",
+            "somalia",
+            "ethiopia",
+            "south africa",
+        ],
+        "South America": [
+            "brazil",
+            "argentina",
+            "chile",
+            "colombia",
+        ],
+        "Oceania": [
+            "australia",
+            "new zealand",
+        ],
+    }
+
+    for region, countries in regions.items():
+        if any(country in title for country in countries):
+            return region
+
+    return "Global"
+
+
 def fetch_gdelt():
     params = {
         "query": "flood OR earthquake OR wildfire OR cyclone",
@@ -50,6 +176,9 @@ def fetch_gdelt():
                 if not title or not source_url:
                     continue
 
+                category = detect_category(title)
+                region = detect_region(title)
+
                 existing = Crisis.query.filter_by(
                     source_url=source_url
                 ).first()
@@ -60,11 +189,12 @@ def fetch_gdelt():
 
                 crisis = Crisis(
                     title=title,
-                    region="Global",
-                    category="External News",
+                    region=region,
+                    category=category,
                     description=(
                         "Automatically collected crisis-related "
-                        "news from GDELT."
+                        "news from GDELT. Category and region "
+                        "are inferred from the article title."
                     ),
                     source_url=source_url,
                 )
