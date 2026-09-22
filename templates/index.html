@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CrisisLens</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            color: #1f2937;
+        }
+
+        header {
+            background: #172033;
+            color: white;
+            padding: 24px 8%;
+        }
+
+        header h1 {
+            font-size: 32px;
+            margin-bottom: 6px;
+        }
+
+        header p {
+            color: #cbd5e1;
+        }
+
+        main {
+            width: 84%;
+            max-width: 1200px;
+            margin: 30px auto;
+        }
+
+        .intro {
+            margin-bottom: 25px;
+        }
+
+        .intro h2 {
+            margin-bottom: 8px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 22px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .stat-card h3 {
+            font-size: 14px;
+            color: #64748b;
+            margin-bottom: 8px;
+        }
+
+        .stat-card p {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .section {
+            background: white;
+            padding: 24px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            margin-bottom: 25px;
+        }
+
+        .section h2 {
+            margin-bottom: 18px;
+        }
+
+        .crisis-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 18px;
+            margin-bottom: 15px;
+        }
+
+        .crisis-card h3 {
+            margin-bottom: 8px;
+        }
+
+        .crisis-card p {
+            color: #475569;
+            line-height: 1.5;
+            margin-bottom: 8px;
+        }
+
+        .tag {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 5px 10px;
+            background: #e2e8f0;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+
+        .source-link {
+            display: inline-block;
+            margin-top: 10px;
+            color: #2563eb;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .source-link:hover {
+            text-decoration: underline;
+        }
+
+        .empty-message {
+            color: #64748b;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        @media (max-width: 700px) {
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            main {
+                width: 92%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>CrisisLens</h1>
+        <p>Global Crisis Information & Monitoring Platform</p>
+    </header>
+
+    <main>
+
+        <div class="intro">
+            <h2>Global Crisis Overview</h2>
+            <p>
+                CrisisLens brings crisis-related information together
+                in one structured platform.
+            </p>
+        </div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <h3>Tracked Events</h3>
+                <p>{{ crises|length }}</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>Regions</h3>
+                <p>
+                    {{ crises|map(attribute="region")|unique|list|length }}
+                </p>
+            </div>
+
+            <div class="stat-card">
+                <h3>Latest Update</h3>
+                <p>
+                    {% if crises %}
+                        {{ crises[0].created_at.strftime("%d %b %Y") }}
+                    {% else %}
+                        —
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Recent Crisis Information</h2>
+
+            {% if crises %}
+
+                {% for crisis in crises %}
+
+                    <div class="crisis-card">
+
+                        <h3>{{ crisis.title }}</h3>
+
+                        <p>
+                            <strong>Region:</strong>
+                            {{ crisis.region }}
+                        </p>
+
+                        <p>
+                            <strong>Category:</strong>
+                            {{ crisis.category }}
+                        </p>
+
+                        <p>
+                            {{ crisis.description }}
+                        </p>
+
+                        <span class="tag">
+                            {{ crisis.category }}
+                        </span>
+
+                        {% if crisis.source_url %}
+                            <br>
+                            <a
+                                class="source-link"
+                                href="{{ crisis.source_url }}"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                View Source →
+                            </a>
+                        {% endif %}
+
+                    </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                <p class="empty-message">
+                    No crisis information available yet.
+                </p>
+
+            {% endif %}
+
+        </div>
+
+    </main>
+
+    <footer>
+        CrisisLens · Global Crisis Information & Monitoring Platform
+    </footer>
+
+</body>
+</html>

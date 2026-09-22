@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report a Crisis - CrisisLens</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            color: #1f2937;
+        }
+
+        header {
+            background: #172033;
+            color: white;
+            padding: 24px 8%;
+        }
+
+        header h1 {
+            font-size: 32px;
+            margin-bottom: 6px;
+        }
+
+        header p {
+            color: #cbd5e1;
+        }
+
+        main {
+            width: 84%;
+            max-width: 800px;
+            margin: 40px auto;
+        }
+
+        .form-section {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .form-section h2 {
+            margin-bottom: 8px;
+        }
+
+        .form-section > p {
+            color: #64748b;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 7px;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 15px;
+            font-family: inherit;
+        }
+
+        textarea {
+            min-height: 130px;
+            resize: vertical;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        .required {
+            color: #dc2626;
+        }
+
+        button {
+            border: none;
+            background: #2563eb;
+            color: white;
+            padding: 12px 22px;
+            border-radius: 6px;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        @media (max-width: 700px) {
+            main {
+                width: 92%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>CrisisLens</h1>
+        <p>Global Crisis Information & Monitoring Platform</p>
+    </header>
+
+    <main>
+
+        <div class="form-section">
+
+            <h2>Report a Crisis</h2>
+
+            <p>
+                Submit information about a crisis or significant event
+                to add it to the CrisisLens database.
+            </p>
+
+            <form method="POST" action="/report">
+
+                <div class="form-group">
+                    <label for="title">
+                        Crisis Title <span class="required">*</span>
+                    </label>
+
+                    <input
+                        type="text"
+                        id="title"
+                        name="title"
+                        placeholder="Enter the crisis title"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="region">
+                        Region <span class="required">*</span>
+                    </label>
+
+                    <input
+                        type="text"
+                        id="region"
+                        name="region"
+                        placeholder="e.g. Middle East, Europe, South Asia"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="category">
+                        Category <span class="required">*</span>
+                    </label>
+
+                    <select id="category" name="category" required>
+                        <option value="">Select a category</option>
+                        <option value="Conflict">Conflict</option>
+                        <option value="Natural Disaster">Natural Disaster</option>
+                        <option value="Humanitarian">Humanitarian</option>
+                        <option value="Political">Political</option>
+                        <option value="Health">Health</option>
+                        <option value="Environmental">Environmental</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">
+                        Description <span class="required">*</span>
+                    </label>
+
+                    <textarea
+                        id="description"
+                        name="description"
+                        placeholder="Describe the event..."
+                        required
+                    ></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="source_url">
+                        Source URL
+                    </label>
+
+                    <input
+                        type="url"
+                        id="source_url"
+                        name="source_url"
+                        placeholder="https://example.com/article"
+                    >
+                </div>
+
+                <button type="submit">
+                    Submit Report
+                </button>
+
+            </form>
+
+            <a class="back-link" href="/">
+                ← Back to CrisisLens
+            </a>
+
+        </div>
+
+    </main>
+
+    <footer>
+        CrisisLens · Global Crisis Information & Monitoring Platform
+    </footer>
+
+</body>
+</html>
