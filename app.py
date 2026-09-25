@@ -20,8 +20,11 @@ class Crisis(db.Model):
         db.DateTime,
         server_default=db.func.now()
     )
+
+
 with app.app_context():
     db.create_all()
+
 
 @app.route("/")
 def home():
