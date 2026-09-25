@@ -65,6 +65,6 @@ jobs:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
     steps:
-      - name: Deploy to Render
+            - name: Deploy to Render
         run: |
-          curl -f -X POST "${{ secrets.RENDER_DEPLOY_HOOK }}?ref=${{ github.sha }}"
+          curl -f -X POST "${{ secrets.RENDER_DEPLOY_HOOK }}"
