@@ -58,3 +58,13 @@ jobs:
 
       - name: Build Docker image
         run: docker build -t crisislens .
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: docker
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Deploy to Render
+        run: |
+          curl -f -X POST "${{ secrets.RENDER_DEPLOY_HOOK }}?ref=${{ github.sha }}"
