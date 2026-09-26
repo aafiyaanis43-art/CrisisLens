@@ -10,7 +10,18 @@ from sqlalchemy import inspect, text
 
 app = Flask(__name__)
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///crisislens.db"
+database_url = os.getenv("DATABASE_URL")
+
+if database_url:
+    database_url = database_url.replace(
+        "postgresql://",
+        "postgresql+psycopg://",
+        1
+    )
+else:
+    database_url = "sqlite:///crisislens.db"
+
+app.config["SQLALCHEMY_DATABASE_URI"] = database_url
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
