@@ -1,262 +1,2089 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CrisisLens</title>
+
+    <title>CrisisLens — Global Crisis Intelligence</title>
 
     <style>
+
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
 
+        :root {
+            --navy: #071b3d;
+            --navy-2: #0a2b63;
+            --blue: #2d6bff;
+            --blue-light: #6ea0ff;
+            --green: #1fd39a;
+            --red: #ff4f73;
+            --cream: #f1f4eb;
+            --white: #ffffff;
+            --muted: #617594;
+            --line: #dce4df;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            background: #f4f6f8;
-            color: #1f2937;
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--cream);
+            color: var(--navy);
+            overflow-x: hidden;
         }
 
-        header {
-            background: #172033;
+        a {
+            color: inherit;
+        }
+
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        .top-header {
+            height: 86px;
+            background: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 5.5%;
+            border-bottom: 1px solid #edf0ed;
+            position: relative;
+            z-index: 20;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .brand-mark {
+            width: 48px;
+            height: 48px;
+            border: 3px solid var(--blue);
+            border-radius: 50%;
+            position: relative;
+        }
+
+        .brand-mark::before,
+        .brand-mark::after {
+            content: "";
+            position: absolute;
+            background: var(--blue);
+        }
+
+        .brand-mark::before {
+            width: 58px;
+            height: 2px;
+            left: -8px;
+            top: 20px;
+        }
+
+        .brand-mark::after {
+            width: 2px;
+            height: 58px;
+            left: 20px;
+            top: -8px;
+        }
+
+        .brand-dot {
+            position: absolute;
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: var(--red);
+            left: 17px;
+            top: 17px;
+            z-index: 2;
+        }
+
+        .brand-name {
+            font-size: 24px;
+            font-weight: 900;
+            letter-spacing: -1px;
+        }
+
+        .brand-subtitle {
+            margin-top: 2px;
+            font-size: 10px;
+            letter-spacing: 2px;
+            color: #72829d;
+        }
+
+        .system-status {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--green);
+            box-shadow: 0 0 0 7px rgba(31, 211, 154, 0.12);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 6px rgba(31, 211, 154, 0.12);
+            }
+
+            50% {
+                box-shadow: 0 0 0 11px rgba(31, 211, 154, 0.03);
+            }
+        }
+
+
+        /* =========================
+           HERO
+        ========================= */
+
+        .hero {
+            min-height: 550px;
+            position: relative;
+            overflow: hidden;
+
+            background:
+                radial-gradient(
+                    circle at 78% 48%,
+                    rgba(50, 120, 255, 0.8),
+                    transparent 25%
+                ),
+                linear-gradient(
+                    115deg,
+                    #061a3c 0%,
+                    #09295f 55%,
+                    #1754ae 100%
+                );
+
             color: white;
-            padding: 24px 8%;
+            padding: 105px 6% 70px;
         }
 
-        header h1 {
-            font-size: 32px;
-            margin-bottom: 6px;
+        .hero::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            opacity: 0.18;
+
+            background-image:
+                linear-gradient(
+                    rgba(255,255,255,0.18) 1px,
+                    transparent 1px
+                ),
+                linear-gradient(
+                    90deg,
+                    rgba(255,255,255,0.18) 1px,
+                    transparent 1px
+                );
+
+            background-size: 55px 55px;
         }
 
-        header p {
-            color: #cbd5e1;
+        .hero-content {
+            position: relative;
+            z-index: 4;
+            width: 52%;
+            max-width: 650px;
         }
 
-        main {
-            width: 84%;
-            max-width: 1200px;
-            margin: 30px auto;
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+
+            padding: 9px 16px;
+
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 999px;
+
+            background: rgba(255,255,255,0.08);
+
+            font-size: 12px;
+            font-weight: 900;
+            letter-spacing: 1.5px;
         }
 
-        .intro {
-            margin-bottom: 25px;
+        .eyebrow span {
+            width: 7px;
+            height: 7px;
+            background: var(--green);
+            border-radius: 50%;
         }
 
-        .intro h2 {
-            margin-bottom: 8px;
+        .hero h1 {
+            margin-top: 28px;
+
+            font-size: clamp(80px, 9vw, 145px);
+            line-height: 0.78;
+            letter-spacing: -7px;
+            font-weight: 950;
         }
+
+        .hero h1 .blue-dot {
+            color: var(--blue-light);
+        }
+
+        .hero-description {
+            margin-top: 38px;
+            max-width: 560px;
+
+            font-size: 17px;
+            line-height: 1.65;
+            color: #c7d8f5;
+        }
+
+        .hero-actions {
+            margin-top: 30px;
+
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 15px 22px;
+
+            border-radius: 9px;
+            text-decoration: none;
+
+            font-size: 14px;
+            font-weight: 900;
+
+            transition:
+                transform 0.2s ease,
+                background 0.2s ease;
+        }
+
+        .button:hover {
+            transform: translateY(-3px);
+        }
+
+        .button-primary {
+            background: white;
+            color: var(--navy);
+        }
+
+        .button-secondary {
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.08);
+        }
+
+
+        /* =========================
+           RADAR / GLOBE
+        ========================= */
+
+        .radar {
+            position: absolute;
+
+            width: 570px;
+            height: 570px;
+
+            right: 5%;
+            top: 38px;
+
+            border-radius: 50%;
+            border: 1px solid rgba(132, 185, 255, 0.35);
+
+            z-index: 2;
+        }
+
+        .radar::before,
+        .radar::after {
+            content: "";
+            position: absolute;
+
+            border: 1px solid rgba(132, 185, 255, 0.25);
+            border-radius: 50%;
+
+            inset: 11%;
+        }
+
+        .radar::after {
+            inset: 23%;
+        }
+
+        .globe {
+            position: absolute;
+
+            width: 450px;
+            height: 450px;
+
+            right: 11%;
+            top: 100px;
+
+            border-radius: 50%;
+
+            background:
+                radial-gradient(
+                    circle at 40% 32%,
+                    #54a0ff,
+                    #2463bd 45%,
+                    #061a3b 85%
+                );
+
+            box-shadow:
+                0 0 80px rgba(55, 139, 255, 0.35),
+                inset -50px -35px 70px rgba(0,0,0,0.35);
+
+            z-index: 3;
+            overflow: hidden;
+        }
+
+        .globe::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent 49.7%,
+                    rgba(255,255,255,0.18) 50%,
+                    transparent 50.3%
+                ),
+                linear-gradient(
+                    0deg,
+                    transparent 49.7%,
+                    rgba(255,255,255,0.18) 50%,
+                    transparent 50.3%
+                );
+
+            opacity: 0.7;
+            transform: rotate(-8deg);
+        }
+
+        .glow-line {
+            position: absolute;
+
+            width: 3px;
+            height: 260px;
+
+            background:
+                linear-gradient(
+                    transparent,
+                    var(--green),
+                    transparent
+                );
+
+            left: 58%;
+            top: 25%;
+
+            transform: rotate(18deg);
+            opacity: 0.85;
+
+            animation: sweep 4s linear infinite;
+        }
+
+        @keyframes sweep {
+
+            0% {
+                transform:
+                    rotate(18deg)
+                    translateY(100px);
+                opacity: 0;
+            }
+
+            40% {
+                opacity: 1;
+            }
+
+            100% {
+                transform:
+                    rotate(18deg)
+                    translateY(-100px);
+                opacity: 0;
+            }
+        }
+
+        .signal {
+            position: absolute;
+
+            width: 15px;
+            height: 15px;
+
+            border-radius: 50%;
+            background: var(--red);
+
+            box-shadow:
+                0 0 0 9px rgba(255,79,115,0.14);
+
+            z-index: 5;
+
+            animation: signalPulse 2s infinite;
+        }
+
+        @keyframes signalPulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.25);
+            }
+        }
+
+        .signal-1 {
+            left: 30%;
+            top: 45%;
+        }
+
+        .signal-2 {
+            left: 65%;
+            top: 30%;
+            animation-delay: .4s;
+        }
+
+        .signal-3 {
+            left: 53%;
+            top: 65%;
+            animation-delay: .8s;
+        }
+
+        .signal-4 {
+            left: 72%;
+            top: 53%;
+            animation-delay: 1.2s;
+        }
+
+        .hero-label {
+            position: absolute;
+            z-index: 7;
+
+            padding: 10px 14px;
+
+            background: rgba(4, 24, 55, 0.9);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 7px;
+
+            color: #d7e6ff;
+
+            font-size: 10px;
+            font-weight: 900;
+            letter-spacing: 1px;
+        }
+
+        .label-live {
+            top: 100px;
+            right: 10%;
+        }
+
+        .label-network {
+            top: 250px;
+            right: 37%;
+        }
+
+        .label-data {
+            bottom: 25px;
+            right: 20%;
+        }
+
+        .label-signal {
+            bottom: 105px;
+            right: 14%;
+        }
+
+
+        /* =========================
+           NAV STRIP
+        ========================= */
+
+        .signal-nav {
+            min-height: 44px;
+
+            background: #03132e;
+            color: #78a8ff;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            gap: 42px;
+            padding: 12px 30px;
+
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .signal-nav span {
+            font-size: 11px;
+            font-weight: 900;
+            letter-spacing: 1.4px;
+        }
+
+        .signal-nav span::after {
+            content: "◆";
+            color: var(--blue);
+            margin-left: 38px;
+            font-size: 7px;
+        }
+
+
+        /* =========================
+           MAIN
+        ========================= */
+
+        .main {
+            width: min(1120px, 88%);
+            margin: 0 auto;
+        }
+
+
+        /* =========================
+           OVERVIEW
+        ========================= */
+
+        .overview {
+            padding: 95px 0 65px;
+        }
+
+        .section-kicker {
+            color: var(--blue);
+
+            font-size: 11px;
+            font-weight: 900;
+            letter-spacing: 2px;
+
+            margin-bottom: 18px;
+        }
+
+        .overview-heading {
+            display: grid;
+
+            grid-template-columns:
+                1.15fr
+                0.85fr;
+
+            align-items: end;
+
+            gap: 70px;
+        }
+
+        .overview-heading h2 {
+            font-size: clamp(54px, 6vw, 82px);
+
+            line-height: 0.91;
+            letter-spacing: -4px;
+            font-weight: 950;
+        }
+
+        .overview-heading p {
+            color: var(--muted);
+
+            line-height: 1.7;
+            font-size: 15px;
+
+            padding-bottom: 8px;
+        }
+
+
+        /* =========================
+           STATS
+        ========================= */
 
         .stats {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 18px;
-            margin-bottom: 30px;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 15px;
+
+            margin-top: 45px;
         }
 
         .stat-card {
             background: white;
-            padding: 22px;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+
+            min-height: 185px;
+
+            padding: 28px 25px 20px;
+
+            border: 1px solid var(--line);
+            border-radius: 16px;
+
+            position: relative;
+            overflow: hidden;
         }
 
-        .stat-card h3 {
+        .stat-card::after {
+            content: "";
+
+            position: absolute;
+
+            height: 4px;
+
+            left: 0;
+            right: 35%;
+            bottom: 0;
+        }
+
+        .stat-card:nth-child(1)::after {
+            background: var(--blue);
+        }
+
+        .stat-card:nth-child(2)::after {
+            background: var(--green);
+        }
+
+        .stat-card:nth-child(3)::after {
+            background: var(--red);
+        }
+
+        .stat-number-label {
+            display: flex;
+            justify-content: space-between;
+
+            color: #60728f;
+
+            font-size: 11px;
+            font-weight: 900;
+            letter-spacing: 1.5px;
+        }
+
+        .stat-index {
+            color: #c3d1e7;
+        }
+
+        .stat-value {
+            margin-top: 30px;
+
+            color: var(--blue);
+
+            font-size: 62px;
+            line-height: 1;
+
+            font-weight: 950;
+            letter-spacing: -3px;
+        }
+
+        .stat-card:nth-child(3) .stat-value {
+            font-size: 32px;
+            letter-spacing: 0;
+        }
+
+
+        /* =========================
+           SIGNAL PULSE
+        ========================= */
+
+        .pulse-panel {
+            margin: 0 0 90px;
+
+            min-height: 150px;
+
+            padding: 28px 25px;
+
+            border-radius: 16px;
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    rgba(255,255,255,0.045) 1px,
+                    transparent 1px
+                ),
+                linear-gradient(
+                    90deg,
+                    rgba(255,255,255,0.045) 1px,
+                    transparent 1px
+                ),
+                var(--navy);
+
+            background-size: 35px 35px;
+
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pulse-title {
+            font-size: 11px;
+            font-weight: 900;
+            letter-spacing: 2px;
+        }
+
+        .pulse-time {
+            position: absolute;
+
+            top: 27px;
+            right: 25px;
+
+            color: #80a8e9;
+
+            font-size: 11px;
+            font-family: monospace;
+        }
+
+        .wave {
+            position: absolute;
+
+            left: 25px;
+            right: 25px;
+            bottom: 35px;
+
+            height: 55px;
+        }
+
+        .wave svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .wave path {
+            fill: none;
+
+            stroke: #4e8eff;
+            stroke-width: 3;
+
+            stroke-dasharray: 9 7;
+
+            animation: dash 5s linear infinite;
+        }
+
+        @keyframes dash {
+
+            to {
+                stroke-dashoffset: -160;
+            }
+        }
+
+
+        /* =========================
+           RECENT SIGNALS
+        ========================= */
+
+        .signals {
+            padding-bottom: 65px;
+        }
+
+        .signals-heading {
+            display: flex;
+
+            align-items: end;
+            justify-content: space-between;
+
+            gap: 30px;
+
+            margin-bottom: 35px;
+        }
+
+        .signals-heading h2 {
+            font-size: clamp(54px, 6vw, 78px);
+
+            line-height: 0.86;
+            letter-spacing: -4px;
+
+            font-weight: 950;
+        }
+
+        .signals-heading p {
+            max-width: 380px;
+
+            color: var(--muted);
+
             font-size: 14px;
-            color: #64748b;
-            margin-bottom: 8px;
+            line-height: 1.6;
+
+            text-align: right;
         }
 
-        .stat-card p {
-            font-size: 28px;
-            font-weight: bold;
+
+        /* =========================
+           DATE FILTERS
+        ========================= */
+
+        .signal-filters {
+            display: flex;
+
+            align-items: center;
+            justify-content: space-between;
+
+            gap: 20px;
+            flex-wrap: wrap;
+
+            margin-bottom: 24px;
         }
 
-        .section {
-            background: white;
-            padding: 24px;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            margin-bottom: 25px;
+        .filter-label {
+            color: #60728f;
+
+            font-size: 11px;
+            font-weight: 900;
+            letter-spacing: 1.8px;
         }
 
-        .section h2 {
-            margin-bottom: 18px;
+        .selected-range {
+            margin-top: 12px;
+
+            color: #8190a5;
+
+            font-size: 11px;
+            font-weight: 800;
+
+            letter-spacing: 1px;
+            text-transform: uppercase;
         }
+
+        .date-filter {
+            display: flex;
+
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .date-filter a {
+            display: inline-flex;
+
+            align-items: center;
+            justify-content: center;
+
+            min-height: 40px;
+
+            padding: 0 16px;
+
+            border: 1px solid #d4ded9;
+            border-radius: 999px;
+
+            background: rgba(255,255,255,0.75);
+
+            color: var(--navy);
+
+            text-decoration: none;
+
+            font-size: 11px;
+            font-weight: 900;
+
+            letter-spacing: 1px;
+
+            transition:
+                all 0.2s ease;
+        }
+
+        .date-filter a:hover {
+            border-color: var(--blue);
+            color: var(--blue);
+
+            transform: translateY(-2px);
+        }
+
+        .date-filter a.active {
+            background: var(--navy);
+            border-color: var(--navy);
+
+            color: white;
+        }
+
+
+        /* =========================
+           SIGNAL FEED
+        ========================= */
+
+        .signal-feed {
+            background: rgba(255,255,255,0.72);
+
+            border: 1px dashed #cfdad4;
+            border-radius: 18px;
+
+            padding: 30px;
+        }
+
+
+        /* =========================
+           CRISIS CARDS
+        ========================= */
 
         .crisis-card {
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            padding: 18px;
-            margin-bottom: 15px;
+            background: white;
+
+            border: 1px solid var(--line);
+            border-radius: 14px;
+
+            padding: 25px;
+
+            margin-bottom: 14px;
+
+            transition:
+                transform 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+        .crisis-card:last-child {
+            margin-bottom: 0;
+        }
+
+        .crisis-card:hover {
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 12px 30px rgba(7,27,61,0.06);
         }
 
         .crisis-card h3 {
-            margin-bottom: 8px;
+            font-size: 22px;
+            line-height: 1.25;
+
+            margin-bottom: 12px;
         }
 
         .crisis-card p {
-            color: #475569;
-            line-height: 1.5;
-            margin-bottom: 8px;
+            color: var(--muted);
+
+            line-height: 1.6;
+
+            margin-bottom: 7px;
         }
+
+        .signal-meta {
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+            flex-wrap: wrap;
+
+            margin-top: 14px;
+
+            color: #71839e;
+
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .signal-meta .separator {
+            color: #c2cdc8;
+        }
+
+
+        /* =========================
+           TAGS
+        ========================= */
 
         .tag {
             display: inline-block;
+
             margin-top: 10px;
-            padding: 5px 10px;
-            background: #e2e8f0;
-            border-radius: 20px;
-            font-size: 12px;
+
+            padding: 7px 11px;
+
+            border-radius: 999px;
+
+            font-size: 11px;
+            font-weight: 900;
         }
+
+        .external-tag {
+            background: #e9f8f3;
+            color: #087b5a;
+        }
+
+        .user-tag {
+            background: #edf3ff;
+            color: var(--blue);
+        }
+
+
+        /* =========================
+           SOURCE LINK
+        ========================= */
 
         .source-link {
             display: inline-block;
+
             margin-top: 10px;
-            color: #2563eb;
+
+            color: var(--blue);
+
             text-decoration: none;
-            font-size: 14px;
+
+            font-size: 13px;
+            font-weight: 800;
         }
 
         .source-link:hover {
             text-decoration: underline;
         }
 
-        .empty-message {
-            color: #64748b;
+
+        /* =========================
+           EMPTY STATE
+        ========================= */
+
+        .empty-state {
+            text-align: center;
+
+            min-height: 230px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            flex-direction: column;
         }
+
+        .radar-mini {
+            width: 72px;
+            height: 72px;
+
+            border: 1px solid #cad8d2;
+            border-radius: 50%;
+
+            position: relative;
+
+            margin-bottom: 25px;
+        }
+
+        .radar-mini::before,
+        .radar-mini::after {
+            content: "";
+
+            position: absolute;
+
+            border: 1px solid #d8e2dd;
+            border-radius: 50%;
+
+            inset: 10px;
+        }
+
+        .radar-mini::after {
+            inset: 21px;
+
+            background: var(--blue);
+
+            box-shadow:
+                0 0 0 8px rgba(45,107,255,0.08);
+        }
+
+        .empty-state h3 {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .empty-state p {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+
+        /* =========================
+           REPORT CTA
+        ========================= */
+
+        .report-section {
+            padding: 10px 0 100px;
+        }
+
+        .report-box {
+            min-height: 390px;
+
+            padding: 65px 55px;
+
+            border-radius: 20px;
+
+            color: white;
+
+            background:
+                radial-gradient(
+                    circle at 85% 20%,
+                    rgba(62,126,255,0.5),
+                    transparent 30%
+                ),
+                linear-gradient(
+                    115deg,
+                    #061a3c,
+                    #123d84
+                );
+
+            position: relative;
+            overflow: hidden;
+        }
+
+        .report-box::after {
+            content: "REPORT";
+
+            position: absolute;
+
+            right: -20px;
+            bottom: -75px;
+
+            color: rgba(255,255,255,0.045);
+
+            font-size: 180px;
+            font-weight: 950;
+
+            letter-spacing: -10px;
+        }
+
+        .report-box .section-kicker {
+            color: #6da0ff;
+        }
+
+        .report-box h2 {
+            max-width: 850px;
+
+            font-size: clamp(52px, 7vw, 92px);
+
+            line-height: 0.9;
+            letter-spacing: -5px;
+
+            font-weight: 950;
+        }
+
+        .report-box p {
+            margin-top: 25px;
+
+            color: #bdd0ef;
+
+            font-size: 16px;
+        }
+
+        .report-box .button {
+            margin-top: 28px;
+
+            position: relative;
+            z-index: 3;
+        }
+
+
+        /* =========================
+           FOOTER
+        ========================= */
 
         footer {
+            background: #03132e;
+
+            color: #8299bd;
+
             text-align: center;
-            padding: 25px;
-            color: #64748b;
-            font-size: 13px;
+
+            padding: 28px;
+
+            font-size: 12px;
+            letter-spacing: 0.5px;
         }
 
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 950px) {
+
+            .hero {
+                min-height: 720px;
+            }
+
+            .hero-content {
+                width: 100%;
+                max-width: 650px;
+            }
+
+            .radar {
+                width: 470px;
+                height: 470px;
+
+                right: -80px;
+                top: 330px;
+            }
+
+            .globe {
+                width: 370px;
+                height: 370px;
+
+                right: -30px;
+                top: 380px;
+            }
+
+            .overview-heading {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+        }
+
+
         @media (max-width: 700px) {
+
+            .top-header {
+                height: 75px;
+                padding: 0 5%;
+            }
+
+            .brand-mark {
+                width: 39px;
+                height: 39px;
+            }
+
+            .brand-name {
+                font-size: 20px;
+            }
+
+            .brand-subtitle {
+                display: none;
+            }
+
+            .system-status {
+                font-size: 9px;
+            }
+
+            .hero {
+                padding: 70px 6% 50px;
+                min-height: 700px;
+            }
+
+            .hero h1 {
+                font-size: 76px;
+                letter-spacing: -5px;
+            }
+
+            .hero-description {
+                font-size: 15px;
+            }
+
+            .radar {
+                width: 360px;
+                height: 360px;
+
+                right: -80px;
+                top: 420px;
+            }
+
+            .globe {
+                width: 290px;
+                height: 290px;
+
+                right: -20px;
+                top: 455px;
+            }
+
+            .signal-nav {
+                justify-content: flex-start;
+
+                gap: 25px;
+
+                overflow-x: auto;
+            }
+
+            .signal-nav span::after {
+                margin-left: 20px;
+            }
+
+            .main {
+                width: 90%;
+            }
+
+            .overview {
+                padding-top: 70px;
+            }
+
+            .overview-heading h2,
+            .signals-heading h2 {
+                font-size: 53px;
+            }
+
             .stats {
                 grid-template-columns: 1fr;
             }
 
-            main {
-                width: 92%;
+            .signals-heading {
+                display: block;
+            }
+
+            .signals-heading p {
+                text-align: left;
+                margin-top: 20px;
+            }
+
+            .signal-filters {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .date-filter {
+                width: 100%;
+            }
+
+            .date-filter a {
+                flex: 1 1 auto;
+            }
+
+            .signal-feed {
+                padding: 15px;
+            }
+
+            .crisis-card {
+                padding: 20px;
+            }
+
+            .report-box {
+                padding: 45px 30px;
+            }
+
+            .report-box h2 {
+                font-size: 52px;
+                letter-spacing: -3px;
             }
         }
+
     </style>
+
 </head>
+
 
 <body>
 
-    <header>
-        <h1>CrisisLens</h1>
-        <p>Global Crisis Information & Monitoring Platform</p>
+
+    <!-- =========================
+         HEADER
+    ========================= -->
+
+    <header class="top-header">
+
+        <div class="brand">
+
+            <div class="brand-mark">
+                <div class="brand-dot"></div>
+            </div>
+
+            <div>
+
+                <div class="brand-name">
+                    CrisisLens
+                </div>
+
+                <div class="brand-subtitle">
+                    GLOBAL CRISIS INTELLIGENCE
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="system-status">
+
+            <span class="status-dot"></span>
+
+            MONITORING SYSTEM ONLINE
+
+        </div>
+
     </header>
 
-    <main>
 
-        <div class="intro">
-            <h2>Global Crisis Overview</h2>
-            <p>
-                CrisisLens brings crisis-related information together
-                in one structured platform.
+    <!-- =========================
+         HERO
+    ========================= -->
+
+    <section class="hero">
+
+        <div class="hero-content">
+
+            <div class="eyebrow">
+
+                <span></span>
+
+                GLOBAL SITUATION MONITOR
+
+            </div>
+
+
+            <h1>
+
+                CRISS<span class="blue-dot">.</span><br>
+                LENS
+
+            </h1>
+
+
+            <p class="hero-description">
+
+                A structured platform for tracking, organizing and
+                understanding crisis-related information from multiple
+                sources around the world.
+
             </p>
+
+
+            <div class="hero-actions">
+
+                <a
+                    href="#signals"
+                    class="button button-secondary"
+                >
+                    Explore Signals ↓
+                </a>
+
+            </div>
+
         </div>
 
-        <div class="stats">
-            <div class="stat-card">
-                <h3>Tracked Events</h3>
-                <p>{{ crises|length }}</p>
-            </div>
 
-            <div class="stat-card">
-                <h3>Regions</h3>
-                <p>
-                    {{ crises|map(attribute="region")|unique|list|length }}
-                </p>
-            </div>
+        <!-- RADAR -->
 
-            <div class="stat-card">
-                <h3>Latest Update</h3>
-                <p>
-                    {% if crises %}
-                        {{ crises[0].created_at.strftime("%d %b %Y") }}
-                    {% else %}
-                        —
-                    {% endif %}
-                </p>
-            </div>
+        <div class="radar"></div>
+
+
+        <!-- GLOBE -->
+
+        <div class="globe">
+
+            <div class="glow-line"></div>
+
+            <div class="signal signal-1"></div>
+            <div class="signal signal-2"></div>
+            <div class="signal signal-3"></div>
+            <div class="signal signal-4"></div>
+
         </div>
 
-        <div class="section">
-            <h2>Recent Crisis Information</h2>
 
-            {% if crises %}
+        <div class="hero-label label-live">
+            • LIVE / GLOBAL
+        </div>
 
-                {% for crisis in crises %}
+        <div class="hero-label label-network">
+            SIGNAL NETWORK / ACTIVE
+        </div>
 
-                    <div class="crisis-card">
+        <div class="hero-label label-signal">
+            SIGNAL 02
+        </div>
 
-                        <h3>{{ crisis.title }}</h3>
+        <div class="hero-label label-data">
+            DATA STREAM / 01
+        </div>
 
-                        <p>
-                            <strong>Region:</strong>
-                            {{ crisis.region }}
-                        </p>
+    </section>
 
-                        <p>
-                            <strong>Category:</strong>
-                            {{ crisis.category }}
-                        </p>
 
-                        <p>
-                            {{ crisis.description }}
-                        </p>
+    <!-- =========================
+         NAVIGATION STRIP
+    ========================= -->
 
-                        {% if crisis.category == "External News" %}
+    <nav class="signal-nav">
 
-    <span class="tag">
-        🌐 External News
-    </span>
+        <span>CRISIS DETECTION</span>
+        <span>REGIONAL SIGNALS</span>
+        <span>EXTERNAL NEWS</span>
+        <span>USER REPORTS</span>
+        <span>SITUATION AWARENESS</span>
+        <span>GLOBAL MONITORING</span>
 
-{% else %}
+    </nav>
 
-    <span class="tag">
-        📝 User Report
-    </span>
 
-{% endif %}
+    <!-- =========================
+         MAIN
+    ========================= -->
 
-                        {% if crisis.source_url %}
-                            <br>
-                            <a
-                                class="source-link"
-                                href="{{ crisis.source_url }}"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                View Source →
-                            </a>
+    <main class="main">
+
+
+        <!-- =========================
+             OVERVIEW
+        ========================= -->
+
+        <section class="overview">
+
+            <div class="section-kicker">
+                SYSTEM OVERVIEW / 01
+            </div>
+
+
+            <div class="overview-heading">
+
+                <h2>
+
+                    SEE THE SIGNAL.<br>
+                    UNDERSTAND THE EVENT.
+
+                </h2>
+
+
+                <p>
+
+                    CrisisLens brings crisis-related information into one
+                    structured view, combining reported events, regions,
+                    categories and source information.
+
+                </p>
+
+            </div>
+
+
+            <!-- STATS -->
+
+            <div class="stats">
+
+
+                <!-- TRACKED EVENTS -->
+
+                <div class="stat-card">
+
+                    <div class="stat-number-label">
+
+                        <span>
+                            TRACKED EVENTS
+                        </span>
+
+                        <span class="stat-index">
+                            01
+                        </span>
+
+                    </div>
+
+
+                    <div class="stat-value">
+
+                        {{ crises|length }}
+
+                    </div>
+
+                </div>
+
+
+                <!-- REGIONS -->
+
+                <div class="stat-card">
+
+                    <div class="stat-number-label">
+
+                        <span>
+                            REGIONS DETECTED
+                        </span>
+
+                        <span class="stat-index">
+                            02
+                        </span>
+
+                    </div>
+
+
+                    <div class="stat-value">
+
+                        {{ crises|map(attribute="region")|unique|list|length }}
+
+                    </div>
+
+                </div>
+
+
+                <!-- LATEST UPDATE -->
+
+                <div class="stat-card">
+
+                    <div class="stat-number-label">
+
+                        <span>
+                            LATEST UPDATE
+                        </span>
+
+                        <span class="stat-index">
+                            03
+                        </span>
+
+                    </div>
+
+
+                    <div class="stat-value">
+
+                        {% if crises %}
+
+                            {% if crises[0].published_at %}
+
+                                {{ crises[0].published_at.strftime("%d %b") }}
+
+                            {% else %}
+
+                                {{ crises[0].created_at.strftime("%d %b") }}
+
+                            {% endif %}
+
+                        {% else %}
+
+                            WAITING
+
                         {% endif %}
 
                     </div>
 
-                {% endfor %}
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             SIGNAL PULSE
+        ========================= -->
+
+        <section class="pulse-panel">
+
+            <div class="pulse-title">
+                SIGNAL PULSE
+            </div>
+
+
+            <div
+                class="pulse-time"
+                id="live-time"
+            >
+                00:00:00
+            </div>
+
+
+            <div class="wave">
+
+                <svg
+                    viewBox="0 0 1000 100"
+                    preserveAspectRatio="none"
+                >
+
+                    <path
+                        d="
+                            M0 55
+                            C40 5, 80 5, 120 55
+                            S200 105, 240 55
+                            S320 5, 360 55
+                            S440 105, 480 55
+                            S560 5, 600 55
+                            S680 105, 720 55
+                            S800 5, 840 55
+                            S920 105, 960 55
+                            S1000 25, 1040 55
+                        "
+                    ></path>
+
+                </svg>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             RECENT SIGNALS
+        ========================= -->
+
+        <section
+            class="signals"
+            id="signals"
+        >
+
+
+            <div class="signals-heading">
+
+                <div>
+
+                    <div class="section-kicker">
+                        SITUATION FEED / 02
+                    </div>
+
+
+                    <h2>
+
+                        RECENT<br>
+                        SIGNALS
+
+                    </h2>
+
+                </div>
+
+
+                <p>
+
+                    Structured crisis information currently tracked by
+                    CrisisLens.
+
+                </p>
+
+            </div>
+
+
+            <!-- =========================
+                 DATE FILTERS
+            ========================= -->
+
+            <div class="signal-filters">
+
+
+                <div>
+
+                    <div class="filter-label">
+                        TIME RANGE
+                    </div>
+
+
+                    <div class="selected-range">
+
+                        Showing:
+
+                        {% if selected_range == "today" %}
+
+                            Today
+
+                        {% elif selected_range == "yesterday" %}
+
+                            Yesterday
+
+                        {% elif selected_range == "7days" %}
+
+                            Last 7 Days
+
+                        {% else %}
+
+                            All Signals
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+                <div class="date-filter">
+
+
+                    <a
+                        href="{{ url_for('home', range='today') }}"
+                        class="{% if selected_range == 'today' %}active{% endif %}"
+                    >
+
+                        TODAY
+
+                    </a>
+
+
+                    <a
+                        href="{{ url_for('home', range='yesterday') }}"
+                        class="{% if selected_range == 'yesterday' %}active{% endif %}"
+                    >
+
+                        YESTERDAY
+
+                    </a>
+
+
+                    <a
+                        href="{{ url_for('home', range='7days') }}"
+                        class="{% if selected_range == '7days' %}active{% endif %}"
+                    >
+
+                        LAST 7 DAYS
+
+                    </a>
+
+
+                    <a
+                        href="{{ url_for('home', range='all') }}"
+                        class="{% if selected_range == 'all' %}active{% endif %}"
+                    >
+
+                        ALL
+
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- =========================
+                 SIGNAL RESULTS
+            ========================= -->
+
+            {% if crises %}
+
+
+                <div class="signal-feed">
+
+
+                    {% for crisis in crises %}
+
+
+                        <div class="crisis-card">
+
+
+                            <h3>
+
+                                {{ crisis.title }}
+
+                            </h3>
+
+
+                            <div class="signal-meta">
+
+
+                                <span>
+
+                                    {{ crisis.region }}
+
+                                </span>
+
+
+                                <span class="separator">
+                                    •
+                                </span>
+
+
+                                <span>
+
+                                    {{ crisis.category }}
+
+                                </span>
+
+
+                                {% if crisis.published_at %}
+
+
+                                    <span class="separator">
+                                        •
+                                    </span>
+
+
+                                    <span>
+
+                                        {{ crisis.published_at.strftime("%d %b %Y, %H:%M UTC") }}
+
+                                    </span>
+
+
+                                {% endif %}
+
+
+                            </div>
+
+
+                            <p style="margin-top: 14px;">
+
+                                {{ crisis.description }}
+
+                            </p>
+
+
+                            <!-- GDELT / USER LABEL -->
+
+                            {% if "Automatically collected crisis-related news from GDELT" in crisis.description %}
+
+
+                                <span class="tag external-tag">
+
+                                    🌐 External News
+
+                                </span>
+
+
+                            {% else %}
+
+
+                                <span class="tag user-tag">
+
+                                    📝 User Report
+
+                                </span>
+
+
+                            {% endif %}
+
+
+                            <!-- ORIGINAL SOURCE -->
+
+                            {% if crisis.source_url %}
+
+
+                                <br>
+
+
+                                <a
+                                    class="source-link"
+                                    href="{{ crisis.source_url }}"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+
+                                    View Source →
+
+                                </a>
+
+
+                            {% endif %}
+
+
+                        </div>
+
+
+                    {% endfor %}
+
+
+                </div>
+
 
             {% else %}
 
-                <p class="empty-message">
-                    No crisis information available yet.
-                </p>
+
+                <!-- EMPTY STATE -->
+
+                <div class="signal-feed">
+
+
+                    <div class="empty-state">
+
+
+                        <div class="radar-mini"></div>
+
+
+                        <h3>
+
+                            No signals for this period
+
+                        </h3>
+
+
+                        <p>
+
+                            Try another time range to explore
+                            previously detected crisis events.
+
+                        </p>
+
+
+                    </div>
+
+
+                </div>
+
 
             {% endif %}
 
-        </div>
+
+        </section>
+
+
+        <!-- =========================
+             REPORT CTA
+        ========================= -->
+
+        <section
+            class="report-section"
+            id="report"
+        >
+
+
+            <div class="report-box">
+
+
+                <div class="section-kicker">
+
+                    CONTRIBUTE / 03
+
+                </div>
+
+
+                <h2>
+
+                    SAW SOMETHING?<br>
+                    REPORT THE SIGNAL.
+
+                </h2>
+
+
+                <p>
+
+                    Submit a structured crisis report and add it to
+                    the CrisisLens information feed.
+
+                </p>
+
+
+                <a
+                    href="{{ url_for('report') }}"
+                    class="button button-primary"
+                >
+
+                    Report a Crisis →
+
+                </a>
+
+
+            </div>
+
+
+        </section>
+
 
     </main>
 
+
+    <!-- =========================
+         FOOTER
+    ========================= -->
+
     <footer>
-    CrisisLens · Global Crisis Information & Monitoring Platform
-    <span> · Running commit: {{ commit_id }}</span>
-</footer>
+
+        CrisisLens · Global Crisis Information & Monitoring Platform
+        · Running commit: {{ commit_id }}
+
+    </footer>
+
+
+    <!-- =========================
+         LIVE CLOCK
+    ========================= -->
+
+    <script>
+
+        function updateTime() {
+
+            const now = new Date();
+
+            const hours =
+                String(now.getHours()).padStart(2, "0");
+
+            const minutes =
+                String(now.getMinutes()).padStart(2, "0");
+
+            const seconds =
+                String(now.getSeconds()).padStart(2, "0");
+
+
+            document.getElementById("live-time").textContent =
+                `${hours}:${minutes}:${seconds}`;
+
+        }
+
+
+        updateTime();
+
+        setInterval(updateTime, 1000);
+
+    </script>
+
+
 </body>
+
 </html>
