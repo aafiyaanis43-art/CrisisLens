@@ -1,4 +1,5 @@
 import os
+import time
 from datetime import datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
 
@@ -13,6 +14,10 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///crisislens.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
+
+# Prevent repeated GDELT requests during a short period.
+last_gdelt_sync = 0
+GDELT_COOLDOWN = 15 * 60
 
 
 @app.context_processor
@@ -191,6 +196,37 @@ def api_crises():
         }
         for crisis in crises
     ]
+
+
+@app.route("/sync", methods=["POST"])
+def sync():
+    global last_gdelt_sync
+
+    current_time = time.time()
+
+    if current_time - last_gdelt_sync < GDELT_COOLDOWN:
+        return {
+            "status": "cooldown",
+            "message": "GDELT sync was recently attempted."
+        }, 429
+
+    last_gdelt_sync = current_time
+
+    try:
+        from fetch_gdelt import fetch_gdelt
+
+        fetch_gdelt()
+
+        return {
+            "status": "ok",
+            "message": "GDELT sync completed."
+        }
+
+    except Exception as error:
+        return {
+            "status": "error",
+            "message": str(error)
+        }, 500
 
 
 @app.route("/health")
