@@ -8,6 +8,10 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///crisislens.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
+@app.context_processor
+def inject_commit_id():
+    commit_id = os.getenv("RENDER_GIT_COMMIT", "local")
+    return {"commit_id": commit_id[:7]}
 
 
 class Crisis(db.Model):
