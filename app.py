@@ -1,6 +1,11 @@
 import os
+from datetime import datetime, timedelta, timezone
+from zoneinfo import ZoneInfo
+
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import inspect, text
+
 
 app = Flask(__name__)
 
@@ -23,20 +28,106 @@ class Crisis(db.Model):
     category = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text, nullable=False)
     source_url = db.Column(db.String(500), nullable=True)
+    published_at = db.Column(db.DateTime, nullable=True, index=True)
     created_at = db.Column(
         db.DateTime,
         server_default=db.func.now()
     )
 
 
+def ensure_schema():
+    """Add new columns to an existing SQLite database if needed."""
+    inspector = inspect(db.engine)
+    columns = {
+        column["name"]
+        for column in inspector.get_columns("crisis")
+    }
+
+    if "published_at" not in columns:
+        with db.engine.begin() as connection:
+            connection.execute(
+                text(
+                    "ALTER TABLE crisis "
+                    "ADD COLUMN published_at DATETIME"
+                )
+            )
+
+
 with app.app_context():
     db.create_all()
+    ensure_schema()
+
+
+def get_date_range(range_key):
+    """Return UTC-naive start/end datetimes for the selected range."""
+    india_tz = ZoneInfo("Asia/Kolkata")
+
+    now_utc = datetime.now(timezone.utc)
+    now_india = now_utc.astimezone(india_tz)
+
+    today = now_india.date()
+
+    if range_key == "today":
+        start_date = today
+        end_date = today + timedelta(days=1)
+
+    elif range_key == "yesterday":
+        start_date = today - timedelta(days=1)
+        end_date = today
+
+    elif range_key == "7days":
+        start_date = today - timedelta(days=6)
+        end_date = today + timedelta(days=1)
+
+    else:
+        return None, None
+
+    start_india = datetime.combine(
+        start_date,
+        datetime.min.time(),
+        tzinfo=india_tz
+    )
+
+    end_india = datetime.combine(
+        end_date,
+        datetime.min.time(),
+        tzinfo=india_tz
+    )
+
+    start_utc = start_india.astimezone(timezone.utc)
+    end_utc = end_india.astimezone(timezone.utc)
+
+    return (
+        start_utc.replace(tzinfo=None),
+        end_utc.replace(tzinfo=None)
+    )
 
 
 @app.route("/")
 def home():
-    crises = Crisis.query.order_by(Crisis.created_at.desc()).all()
-    return render_template("index.html", crises=crises)
+    range_key = request.args.get("range", "today")
+
+    query = Crisis.query
+
+    if range_key != "all":
+        start_date, end_date = get_date_range(range_key)
+
+        if start_date and end_date:
+            query = query.filter(
+                Crisis.published_at >= start_date,
+                Crisis.published_at < end_date
+            )
+
+    crises = query.order_by(
+        Crisis.published_at.desc(),
+        Crisis.created_at.desc()
+    ).all()
+
+    return render_template(
+        "index.html",
+        crises=crises,
+        selected_range=range_key
+    )
 
 
 @app.route("/report", methods=["GET", "POST"])
@@ -51,12 +142,17 @@ def report():
         if not title or not region or not category or not description:
             return "All required fields must be filled.", 400
 
+        current_time = datetime.now(timezone.utc).replace(
+            tzinfo=None
+        )
+
         crisis = Crisis(
             title=title,
             region=region,
             category=category,
             description=description,
-            source_url=source_url or None
+            source_url=source_url or None,
+            published_at=current_time
         )
 
         db.session.add(crisis)
@@ -69,7 +165,10 @@ def report():
 
 @app.route("/api/crises")
 def api_crises():
-    crises = Crisis.query.order_by(Crisis.created_at.desc()).all()
+    crises = Crisis.query.order_by(
+        Crisis.published_at.desc(),
+        Crisis.created_at.desc()
+    ).all()
 
     return [
         {
@@ -79,7 +178,16 @@ def api_crises():
             "category": crisis.category,
             "description": crisis.description,
             "source_url": crisis.source_url,
-            "created_at": crisis.created_at.isoformat()
+            "published_at": (
+                crisis.published_at.isoformat()
+                if crisis.published_at
+                else None
+            ),
+            "created_at": (
+                crisis.created_at.isoformat()
+                if crisis.created_at
+                else None
+            )
         }
         for crisis in crises
     ]
