@@ -1,0 +1,15 @@
+name: CrisisLens News Sync
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Trigger CrisisLens GDELT sync
+        run: |
+          curl -X POST "https://crisislens-6q9b.onrender.com/sync"
